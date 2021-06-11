@@ -104,7 +104,9 @@ GIT INSTALL
 # First Steps on linux
 
 ## GIT CLONE
-    git clone https://github.com/parkingomat/plesk.domains.raspbian.git && cd plesk.domains.raspbian
+git clone https://github.com/parkingomat/plesk.domains.raspbian.git && cd plesk.domains.raspbian
+    
+    sh .apifork/download
 
 ### install packages for composer
     sh .apibuild/install
@@ -118,6 +120,8 @@ GIT INSTALL
 ### open in browser
     sh .apicra/browser
 
+http://raspberrypi:8080/index.php
+http://raspberrypi:8080/index.php?hostname=softreck.com
 ### Install PHP 7 and common modules
 Install PHP
 ```
