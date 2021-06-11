@@ -106,8 +106,11 @@ GIT INSTALL
 ## GIT CLONE
     git clone https://github.com/parkingomat/plesk.domains.raspbian.git && cd plesk.domains.raspbian
 
-### install
+### install packages for composer
     sh .apibuild/install
+
+### install functions for apifunc
+    sh .apifunc/install
 
 ### start
     sh .apiexec/start
