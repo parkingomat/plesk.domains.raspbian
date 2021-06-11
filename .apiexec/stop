@@ -1,4 +1,3 @@
 #!/bin/bash
-echo "I will stop the nodejs application ..."
-pkill -f node
-#pkill -f nodejs
+echo "I will stop the PHP application ..."
+pkill -f php

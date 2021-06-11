@@ -57,34 +57,7 @@ one file to start promagen project
 
 
 
-# First Steps
 
-start by composer
-
-    php composer.phar start
-
-## on linux
-
-### install
-    sh .apicra/install
-
-### start
-    sh .apicra/start
-
-### open in browser
-    sh .apicra/browser
-
-## on windows
-
-### install
-    .apicra\install.bat
-
-### start
-    .apicra\start.bat
-
-
-### open in browser
-    .apicra\browser.bat
 
 
 ## packagist
@@ -127,10 +100,20 @@ GIT INSTALL
 
     sudo apt install -y git
 
-GIT CLONE
 
-    git clone https://github.com/parkingomat/plesk.domains.php.git && cd plesk.domains.php
+# First Steps on linux
 
+## GIT CLONE
+    git clone https://github.com/parkingomat/plesk.domains.raspbian.git && cd plesk.domains.raspbian
+
+### install
+    sh .apibuild/install
+
+### start
+    sh .apiexec/start
+
+### open in browser
+    sh .apicra/browser
 
 ### Install PHP 7 and common modules
 Install PHP

@@ -1,7 +1,11 @@
 #!/bin/bash
-#full_path=$(realpath $0)
-#dir_path=$(dirname $full_path)
-#echo $dir_path
-#node $dir_path/server.js
-#node server.js
-forever start server.js
+@ECHO OFF
+echo I will start PHP server ...
+WHERE php
+IF %ERRORLEVEL% NEQ 0 (
+    echo PHP is not installed on this system!
+    echo try to install PHP over command:
+    echo .apitee\\install.bat
+) else (
+    nohup php -S 0.0.0.0:8080 -t php
+)
