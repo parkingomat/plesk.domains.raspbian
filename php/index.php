@@ -1,21 +1,18 @@
 <?php
 
-require('../vendor/autoload.php');
-require('../.apifunc/apifunc.php');
+// form for search and show list
 
-
-use letjson\LetJson;
 
 try {
     // how to load composer packages?
+//    let_html([
     apifunc([
+        'https://php.parkingomat.com/header.php',
+        'https://php.parkingomat.com/form.php',
+        'https://php.parkingomat.com/footer.php',
         'https://php.letjson.com/let_json.php',
         'https://php.defjson.com/def_json.php',
         'https://php.eachfunc.com/each_func.php',
-        'https://domain.phpfunc.com/get_domain_by_url.php',
-        'https://domain.phpfunc.com/clean_url.php',
-        'https://php.parkingomat.com/getDomainsFromHost.php',
-        'https://php.parkingomat.com/header_json.php',
     ], function () {
 
         if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
@@ -28,25 +25,6 @@ try {
         $objs = new LetJson("../../plesk.json");
 //        header_json((array) $objs);
 
-        if (empty($_GET['hostname'])) {
-            $data = [];
-            $objs->each(function ($obj) {
-                global $data;
-                $data[] = getDomainsFromHost($obj, []);
-//                var_dump($data);
-            });
-            global $data;
-            header_json($data);
-
-        } else {
-
-            $objs->each(function ($obj) {
-                if ($obj->host === $_GET['hostname']) {
-                    $data = getDomainsFromHost($obj, []);
-                    header_json($data);
-                }
-            });
-        }
 
     }, '../.apifunc');
 
@@ -57,4 +35,3 @@ try {
         'error' => true
     ]);
 }
-
