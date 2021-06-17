@@ -1,0 +1,106 @@
+#!/bin/sh
+# Gapcio is simple SSH keys management tool that use GitHub keys
+
+## Usage: gapcio <command> [args]
+##
+## Commands:
+##     help
+##       Show this message and exits
+##     get <username>
+##       Fetch and display public keys for given user
+##     add <username> [authorized_keys_path]
+##       Add public keys of given user to `authorized_keys_path` (by default
+##       `~/.ssh/authorized_keys)
+##     delete <username> [authorized_keys_path]
+##       Delete all public keys of given user from `authorized_keys_path`
+##       (by default `~/.ssh/authorized_keys)
+
+VERSION="0.0.1"
+
+command="$1"
+shift 1
+
+gp_help() {
+  grep '^##' "$0" | cut -c 4-
+}
+
+gp_get() {
+  username="$1"
+  if [ -z "$username" ]; then
+    echo "User name required" 1>&2
+    exit 1
+  fi
+
+  keys=$(curl -sL "https://github.com/${username}.keys")
+  echo "$keys" | grep "^ssh-"
+}
+
+gp_add() {
+  username="$1"
+  auth_path="${2:-$HOME/.ssh/authorized_keys}"
+
+  keys="$(gp_get "$username" | sed "s/$/ $username/")"
+  if [ -n "$keys" ]; then
+    echo "$keys"
+  else
+    exit 1
+  fi
+  if [ -f "$auth_path" ]; then
+    cp -a "$auth_path" "${auth_path}.old"
+    cp -a "$auth_path" "${auth_path}.tmp"
+  fi
+  echo "$keys" >> "${auth_path}.tmp"
+  sort -u "${auth_path}.tmp" > "$auth_path"
+}
+
+gp_delete() {
+  username="$1"
+  auth_path="${2:-$HOME/.ssh/authorized_keys}"
+
+  keys="$(gp_get "$username" | sed "s/$/ $username/")"
+  if [ ! -n "$keys" ]; then
+    exit 1
+  fi
+
+  if [ ! -f "$auth_path" ]; then
+    touch "$auth_path"
+  fi
+  cp -a "$auth_path" "${auth_path}.old"
+  cp -a "$auth_path" "${auth_path}.tmp"
+
+  fsize=0
+  for key in $(gp_get "$username" | awk '{ print $2 }'); do
+    fsize_org="$(stat -f %z "${auth_path}.tmp")"
+    grep -v "$key" "${auth_path}.tmp" > "$auth_path"
+    fsize="$(stat -f %z "$auth_path")"
+    if [ "$fsize_org" -ne "$fsize" ]; then
+      echo "Deleted key: '$key'"
+    fi
+    cp -a "$auth_path" "${auth_path}.tmp"
+  done
+  if [ "$fsize" -eq 0 ]; then
+    rm -f "$auth_path"
+  fi
+}
+
+gp_upload() {
+  username="$1"
+  addr="$2"
+
+  gp_get "$username" | ssh "$addr" 'cat >> $HOME/.ssh/authorized_keys'
+}
+
+case "$command" in
+  '--help' | '-h') gp_help;;
+  '--version' | '-v') echo "$VERSION";;
+  *)
+    command_func=$(command -v "gp_$command")
+    if [ ! -z "$command_func" ]; then
+      "$command_func" "$@"
+    else
+      echo "Unknown command $command"
+      echo
+      gp_help
+      exit 1
+    fi
+esac

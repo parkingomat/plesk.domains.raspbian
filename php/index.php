@@ -7,12 +7,10 @@ try {
     // how to load composer packages?
 //    let_html([
     apifunc([
+        'https://php.parkingomat.com/post.php',
         'https://php.parkingomat.com/header.php',
         'https://php.parkingomat.com/form.php',
         'https://php.parkingomat.com/footer.php',
-        'https://php.letjson.com/let_json.php',
-        'https://php.defjson.com/def_json.php',
-        'https://php.eachfunc.com/each_func.php',
     ], function () {
 
         if ($_SERVER['REQUEST_METHOD'] !== 'GET') {

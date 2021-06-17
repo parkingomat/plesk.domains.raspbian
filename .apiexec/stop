@@ -1,3 +1,4 @@
 #!/bin/bash
 echo "I will stop the PHP application ..."
 pkill -f php
+pgrep?
