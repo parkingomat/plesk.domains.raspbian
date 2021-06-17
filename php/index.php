@@ -1,7 +1,6 @@
 <?php
 
-// form for search and show list
-
+require('../.apifunc/apifunc.php');
 
 try {
     // how to load composer packages?
